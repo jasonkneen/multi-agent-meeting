@@ -1,0 +1,109 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "JobContext",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "WorkerOptions",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "cli",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "JobProcess",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "ChatContext",
+        "importPath": "livekit.agents.llm",
+        "description": "livekit.agents.llm",
+        "isExtraImport": true,
+        "detail": "livekit.agents.llm",
+        "documentation": {}
+    },
+    {
+        "label": "ChatMessage",
+        "importPath": "livekit.agents.llm",
+        "description": "livekit.agents.llm",
+        "isExtraImport": true,
+        "detail": "livekit.agents.llm",
+        "documentation": {}
+    },
+    {
+        "label": "VoiceAssistant",
+        "importPath": "livekit.agents.voice_assistant",
+        "description": "livekit.agents.voice_assistant",
+        "isExtraImport": true,
+        "detail": "livekit.agents.voice_assistant",
+        "documentation": {}
+    },
+    {
+        "label": "silero",
+        "importPath": "livekit.plugins",
+        "description": "livekit.plugins",
+        "isExtraImport": true,
+        "detail": "livekit.plugins",
+        "documentation": {}
+    },
+    {
+        "label": "openai",
+        "importPath": "livekit.plugins",
+        "description": "livekit.plugins",
+        "isExtraImport": true,
+        "detail": "livekit.plugins",
+        "documentation": {}
+    },
+    {
+        "label": "prewarm",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def prewarm(proc: JobProcess):\n    proc.userdata[\"vad\"] = silero.VAD.load()\n# Main entry point for the voice assistant\nasync def entrypoint(ctx: JobContext):\n    # Set up initial chat context\n    initial_context = ChatContext(\n        messages=[\n            ChatMessage(\n                role=\"system\",\n                content=\"You are a voice assistant. Pretend we're having a human conversation, no special formatting or headings, just natural speech.\",",
+        "detail": "main",
+        "documentation": {}
+    }
+]

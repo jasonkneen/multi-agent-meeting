@@ -1,25 +1,23 @@
 import os
 import asyncio
-
-from livekit.agents import JobContext, WorkerOptions, cli, JobProcess
-from livekit.agents.llm import (
-    ChatContext,
-    ChatMessage,
-)
-from livekit.agents.voice_assistant import VoiceAssistant
-from livekit.plugins import deepgram, silero, cartesia, openai
-
 from dotenv import load_dotenv
 
+from livekit.agents import JobContext, WorkerOptions, cli, JobProcess
+from livekit.agents.llm import ChatContext, ChatMessage
+from livekit.agents.voice_assistant import VoiceAssistant
+from livekit.plugins import silero, openai
+
+# Load environment variables from .env file
 load_dotenv()
 
-
+# Preload resources to improve initialization performance
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
 
-
+# Main entry point for the voice assistant
 async def entrypoint(ctx: JobContext):
-    initial_ctx = ChatContext(
+    # Set up initial chat context
+    initial_context = ChatContext(
         messages=[
             ChatMessage(
                 role="system",
@@ -28,27 +26,41 @@ async def entrypoint(ctx: JobContext):
         ]
     )
 
+    # Configure the voice assistant with VAD, STT, LLM, and TTS
     assistant = VoiceAssistant(
         vad=ctx.proc.userdata["vad"],
-        stt=deepgram.STT(),
-        llm=openai.LLM(
-            base_url="https://api.cerebras.ai/v1",
-            api_key=os.environ.get("CEREBRAS_API_KEY"),
-            model="llama3.1-8b",
+        stt=openai.STT(
+            base_url="https://api.openai.com/v1",
+            api_key=os.getenv("OPENAI_API_KEY"),
         ),
-        tts=cartesia.TTS(voice="248be419-c632-4f23-adf1-5324ed7dbf1d"),
-        chat_ctx=initial_ctx,
+        llm=openai.LLM(
+            base_url="https://api.openai.com/v1",
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="gpt-4o"
+        ),
+        tts=openai.TTS(
+            base_url="https://api.openai.com/v1",
+            api_key=os.getenv("OPENAI_API_KEY"),
+            voice="nova"
+        ),
+        chat_ctx=initial_context,
     )
 
-    await ctx.connect()
-    assistant.start(ctx.room)
-    await asyncio.sleep(1)
-    await assistant.say("Hi there, how are you doing today?", allow_interruptions=True)
+    # Connect the assistant and start the interaction
+    try:
+        await ctx.connect()  # Establish connection with the room
+        assistant.start(ctx.room)  # Start the voice assistant in the room
+        await asyncio.sleep(1)  # Allow resources to initialize
+        await assistant.say("Hi there, how are you doing today?", allow_interruptions=True)
+    except Exception as e:
+        print(f"Error starting the assistant: {e}")
 
-
+# Application entry point
 if __name__ == "__main__":
     cli.run_app(
         WorkerOptions(
-            agent_name="smith 1", entrypoint_fnc=entrypoint, prewarm_fnc=prewarm
+            agent_name="voice_assistant_agent",
+            entrypoint_fnc=entrypoint,
+            prewarm_fnc=prewarm,
         )
     )
